@@ -1,7 +1,7 @@
 # twml_final
 Trust Worthy Machine Learning (Spring 2023) Final Project
 
-TIMNET (https://github.com/Jiaxin-Ye/TIM-Net_SER) with an added utily function `my_test`.
+TIMNET (https://github.com/Jiaxin-Ye/TIM-Net_SER) with an added utily function `my_test`, which adapts the original `TIMNET_Model.test` method to arbitrary weights and datasets.
 
 ## CAVEATS:
 
