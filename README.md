@@ -11,7 +11,7 @@ TIMNET (https://github.com/Jiaxin-Ye/TIM-Net_SER) with an added utily function `
 2. Train and test data must have the same class label set.
 
 
-3. If input N is large (similar to that of IEMOCAP), must set dilation_size to 10 manually -- this is specified in the original code, so we're passing that on.
+3. If input x.shape[0] is large (similar to that of IEMOCAP), must set dilation_size to 10 manually -- this is specified in the original code, so we're passing that on.
 
 
 4. The results save path is defaulted to ./Results
