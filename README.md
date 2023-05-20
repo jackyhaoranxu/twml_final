@@ -25,7 +25,7 @@ TIMNET (https://github.com/Jiaxin-Ye/TIM-Net_SER) with an added utily function `
 To run a test on a custom dataset, run
 
 ```
-$ python main.py --mode my_test --data_path <data_path> --class_labels <class 1> ... <class N> --weights_path <weights_path>
+$ python main.py --mode my_test --data_path <data_path> --class_labels <class 1> ... <class k> --weights_path <weights_path>
 ```
 
 or to run on a default dataset, run
