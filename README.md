@@ -33,3 +33,17 @@ or to run on a default dataset, run
 ```
 $ python main.py --mode my_test --data <default_dataset_name> --weights_path <weights_path>
 ```
+
+
+## FYI
+
+The shape of each individual data in the 6 default dataset is presented below. 
+
+Format: _dataset_name_: _MFCC_array_shape_, _number_of_labels_
+
+- IEMOCAP: (606, 39), 4
+- EMOVO: (188, 39), 7
+- RAVDE: (215, 39), 8
+- CASIA: (172, 39), 6
+- EMODB: (188, 39), 7
+- SAVEE: (254, 39), 7
