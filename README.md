@@ -5,7 +5,7 @@ TIMNET (https://github.com/Jiaxin-Ye/TIM-Net_SER) with an added utily function `
 
 ## CAVEATS:
 
-1. Preprocess all data so that they have similar input sizes. Preprocess train and test data by padding so that they have the same (N, 39) MFCC input size. 
+1. Preprocess before training so that the training and the test data have the same input sizes. This can be done by padding them into same-sized (N, 39) MFCC arrays.
 
 
 2. Train and test data must have the same class label set.
