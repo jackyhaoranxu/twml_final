@@ -201,7 +201,7 @@ def create_timnet_model(args, data_shape, num_classes):
                    optimizer =Adam(learning_rate=args.lr, beta_1=args.beta1, 
                                    beta_2=args.beta2, epsilon=1e-8),
                    metrics = ['accuracy'])
-    print("Temporal create succes!")
+    print("Temporal create success!")
     return model
 
 def my_test(args, x, y, class_labels, dataset_name): 

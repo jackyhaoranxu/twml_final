@@ -61,12 +61,12 @@ if args.data=="IEMOCAP" and args.dilation_size!=10:
 # print(f"###gpus:{gpus}")
 
 CLASS_LABELS_finetune = ("angry", "fear", "happy", "neutral","sad")
-CASIA_CLASS_LABELS = ("angry", "fear", "happy", "neutral", "sad", "surprise")#CASIA
-EMODB_CLASS_LABELS = ("angry", "boredom", "disgust", "fear", "happy", "neutral", "sad")#EMODB
-SAVEE_CLASS_LABELS = ("angry","disgust", "fear", "happy", "neutral", "sad", "surprise")#SAVEE
-RAVDE_CLASS_LABELS = ("angry", "calm", "disgust", "fear", "happy", "neutral","sad","surprise")#rav
-IEMOCAP_CLASS_LABELS = ("angry", "happy", "neutral", "sad")#iemocap
-EMOVO_CLASS_LABELS = ("angry", "disgust", "fear", "happy","neutral","sad","surprise")#emovo
+CASIA_CLASS_LABELS = ("angry", "fear", "happy", "neutral", "sad", "surprise") #CASIA, Chinese/German/Italian
+EMODB_CLASS_LABELS = ("angry", "boredom", "disgust", "fear", "happy", "neutral", "sad") #EMODB, Chinese/German/Italian
+SAVEE_CLASS_LABELS = ("angry","disgust", "fear", "happy", "neutral", "sad", "surprise") #SAVEE, English
+RAVDE_CLASS_LABELS = ("angry", "calm", "disgust", "fear", "happy", "neutral","sad","surprise") #RAVDE, English
+IEMOCAP_CLASS_LABELS = ("angry", "happy", "neutral", "sad") #IEMOCAP, English
+EMOVO_CLASS_LABELS = ("angry", "disgust", "fear", "happy","neutral","sad","surprise") #EMOVO, Chinese/German/Italian
 CLASS_LABELS_dict = {"CASIA": CASIA_CLASS_LABELS,
                "EMODB": EMODB_CLASS_LABELS,
                "EMOVO": EMOVO_CLASS_LABELS,
