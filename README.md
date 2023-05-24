@@ -34,6 +34,13 @@ or to run on a default dataset, run
 $ python main.py --mode my_test --data <default_dataset_name> --weights_path <weights_path>
 ```
 
+To train on a custom datset, run
+
+```
+$ python main.py --mode train --data_path <data_path> --class_labels <class 1> ... <class k>
+```
+
+
 
 ## FYI
 
