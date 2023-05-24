@@ -60,7 +60,7 @@ if args.data=="IEMOCAP" and args.dilation_size!=10:
 # session = tf.compat.v1.Session(config=config)
 # print(f"###gpus:{gpus}")
 
-CLASS_LABELS_finetune = ("angry", "fear", "happy", "neutral","sad")
+CLASS_LABELS_finetune = ("angry", "fear", "happy", "neutral", "sad")
 CASIA_CLASS_LABELS = ("angry", "fear", "happy", "neutral", "sad", "surprise") #CASIA, Chinese/German/Italian
 EMODB_CLASS_LABELS = ("angry", "boredom", "disgust", "fear", "happy", "neutral", "sad") #EMODB, Chinese/German/Italian
 SAVEE_CLASS_LABELS = ("angry","disgust", "fear", "happy", "neutral", "sad", "surprise") #SAVEE, English
