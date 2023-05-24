@@ -89,6 +89,7 @@ else:
         data = np.load(args.data_path, allow_pickle=True).item()
         CLASS_LABELS = args.class_labels
         dataset_name = Path(args.data_path).stem
+        args.data = dataset_name  # will be used for file naming
 x_source = data["x"]
 y_source = data["y"]
 
@@ -96,6 +97,9 @@ y_source = data["y"]
 if args.mode=="train":
     model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
     model.train(x_source, y_source)
+elif args.mode=='my_train':
+    model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
+    model.my_train(x_source, y_source)
 elif args.mode=="test":
     model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
     x_feats, y_labels = model.test(x_source, y_source, path=args.test_path)# x_feats and y_labels are test datas for t-sne
