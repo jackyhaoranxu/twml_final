@@ -93,7 +93,7 @@ common_labels = ['angry', 'fear', 'happy', 'neutral', 'sad']
 if args.data_type == 'mfcc':
     data_dir = 'MFCC_Uniform' # padded MFCC data
 elif args.data_type == 'audio':
-    data_dir = 'Processed_Audio' # padded raw audio data
+    data_dir = 'uniform_by_audio' # padded raw audio data
 
 # parse datasets to use for training/testing
 train_names = args.train_datasets

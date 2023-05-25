@@ -158,7 +158,7 @@ class TIMNET_Model(Common_Model):
             os.mkdir(resultpath)
 
         self.create_model()
-        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=self.args.random_seed)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=self.args.random_seed, shuffle=True, stratify=y)
         y_train = smooth_labels(y_train, 0.1)
 
         now = datetime.datetime.now()
@@ -187,7 +187,7 @@ class TIMNET_Model(Common_Model):
 
         print(classification_report(np.argmax(y_test,axis=1),np.argmax(y_pred_best,axis=1), target_names=self.class_label))
 
-        writer = pd.ExcelWriter(resultpath+self.args.data+'_'+str(round(best_eva_list[1]*10000)/100)+"_"+str(self.args.random_seed)+"_"+now_time+'.xlsx')
+        writer = pd.ExcelWriter(resultpath+self.args.data+'_'+str(round(best_eva_list[1]*10000)/100)+"_"+self.args.data_type+str(self.args.random_seed)+"_"+now_time+'.xlsx')
 
         temp = {}
         temp[" "] = self.class_label
@@ -360,7 +360,7 @@ def my_test(args, model, x, y, class_labels, dataset_name):
     # model_name = Path(weights_path).stem
     # test_name = model_name + "_ON_" + dataset_name
     save_folder = Path(results_folder)
-    conf_matrix_path = save_folder / ("CONF_MATRIX_" + args.data + ".csv")
+    conf_matrix_path = save_folder / ("CONF_MATRIX_" + args.data + '_' + args.data_type + ".csv")
     conf_matrix_df.to_csv(conf_matrix_path)
     print(f'Confusion matrix has been saved to {conf_matrix_path}')
 
@@ -372,7 +372,7 @@ def my_test(args, model, x, y, class_labels, dataset_name):
     print('Classification Report: \n', eval_metrics_df)
 
     # Save classification report as .csv
-    eval_metrics_path = save_folder / ("EVAL_METRICS_" + args.data + ".csv")
+    eval_metrics_path = save_folder / ("EVAL_METRICS_" + args.data + '_' + args.data_type + ".csv")
     eval_metrics_df.to_csv(eval_metrics_path)
     print(f'Classification report has been saved to {eval_metrics_path}')
 

@@ -151,31 +151,31 @@ def get_train_test_data(data_dir, train_names, test_names):
 #%%
 
 orig_data_dir = 'MFCC'
-data_names = ['CASIA', 'EMODB', 'EMOVO', 'RAVDE', 'SAVEE'] # 'IEMOCAP.npy'
+data_names = ['EMODB', 'EMOVO', 'RAVDE', 'SAVEE'] # 'IEMOCAP.npy'
 common_labels = ['angry', 'fear', 'happy', 'neutral', 'sad']
 uni_data_dir = 'MFCC_Uniform'
 
 # make mfcc data uniform (x/y shapes) across all datasets
 orig_data, padded_data = get_uniform_mfcc(orig_data_dir, data_names, common_labels, uni_data_dir)
 
-###############################################################################
+# ###############################################################################
 
-# make dataset splits
-mix_train_names = ['CASIA', 'EMODB', 'EMOVO']
-mix_test_names = ['RAVDE', 'SAVEE']
-mix_train, mix_test = get_train_test_data(uni_data_dir, mix_train_names, mix_test_names)
+# # make dataset splits
+# mix_train_names = ['CASIA', 'EMODB', 'EMOVO']
+# mix_test_names = ['RAVDE', 'SAVEE']
+# mix_train, mix_test = get_train_test_data(uni_data_dir, mix_train_names, mix_test_names)
 
-eng_train_names = ['RAVDE', 'SAVEE']
-eng_test_names = ['CASIA', 'EMODB', 'EMOVO']
-eng_train, eng_test = get_train_test_data(uni_data_dir, eng_train_names, eng_test_names)
+# eng_train_names = ['RAVDE', 'SAVEE']
+# eng_test_names = ['CASIA', 'EMODB', 'EMOVO']
+# eng_train, eng_test = get_train_test_data(uni_data_dir, eng_train_names, eng_test_names)
 
-one_vs_all_train1_names = ['CASIA']
-one_vs_all_test1_names = ['EMODB', 'EMOVO', 'RAVDE', 'SAVEE']
-one_vs_all_train1, one_vs_all_test1 = get_train_test_data(uni_data_dir, one_vs_all_train1_names, one_vs_all_test1_names)
+# one_vs_all_train1_names = ['CASIA']
+# one_vs_all_test1_names = ['EMODB', 'EMOVO', 'RAVDE', 'SAVEE']
+# one_vs_all_train1, one_vs_all_test1 = get_train_test_data(uni_data_dir, one_vs_all_train1_names, one_vs_all_test1_names)
 
-one_vs_all_train2_names = ['EMODB']
-one_vs_all_test2_names = ['CASIA', 'EMOVO', 'RAVDE', 'SAVEE']
-one_vs_all_train2, one_vs_all_test2 = get_train_test_data(uni_data_dir, one_vs_all_train2_names, one_vs_all_test2_names)
+# one_vs_all_train2_names = ['EMODB']
+# one_vs_all_test2_names = ['CASIA', 'EMOVO', 'RAVDE', 'SAVEE']
+# one_vs_all_train2, one_vs_all_test2 = get_train_test_data(uni_data_dir, one_vs_all_train2_names, one_vs_all_test2_names)
 
 
 
