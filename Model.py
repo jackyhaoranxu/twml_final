@@ -206,6 +206,69 @@ class TIMNET_Model(Common_Model):
         self.matrix = []
         self.eva_matrix = []
         self.trained = True
+        
+        return self.model
+    
+    ######## THIS VERSION IS ONLY COMPATIBLE WITH A SINGLE DATASET
+    # def my_train(self, x, y):
+
+    #     filepath = self.args.model_path
+    #     resultpath = self.args.result_path
+
+    #     if not os.path.exists(filepath):
+    #         os.mkdir(filepath)
+    #     if not os.path.exists(resultpath):
+    #         os.mkdir(resultpath)
+
+    #     self.create_model()
+    #     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=self.args.random_seed)
+    #     y_train = smooth_labels(y_train, 0.1)
+
+    #     now = datetime.datetime.now()
+    #     now_time = datetime.datetime.strftime(now,'%Y-%m-%d_%H-%M-%S')
+
+    #     folder_address = filepath+self.args.data+"_"+str(self.args.random_seed)+"_"+now_time
+    #     if not os.path.exists(folder_address):
+    #         os.mkdir(folder_address)
+
+    #     weight_path = folder_address+'/'+"weights_best.hdf5"
+
+    #     checkpoint = callbacks.ModelCheckpoint(weight_path, monitor='val_accuracy', verbose=1,save_weights_only=True,save_best_only=True,mode='max')
+
+    #     self.model.fit(x_train, y_train, validation_data=(x_test, y_test), batch_size = self.args.batch_size, epochs = self.args.epoch, verbose=1, callbacks=[checkpoint])
+
+    #     self.model.load_weights(weight_path)
+    #     best_eva_list = self.model.evaluate(x_test, y_test)
+
+    #     print('Model evaluation: ', best_eva_list)
+
+    #     y_pred_best = self.model.predict(x_test)
+    #     self.matrix.append(confusion_matrix(np.argmax(y_test,axis=1),np.argmax(y_pred_best,axis=1)))
+
+    #     em = classification_report(np.argmax(y_test,axis=1),np.argmax(y_pred_best,axis=1), target_names=self.class_label,output_dict=True)
+    #     self.eva_matrix.append(em)
+
+    #     print(classification_report(np.argmax(y_test,axis=1),np.argmax(y_pred_best,axis=1), target_names=self.class_label))
+
+    #     writer = pd.ExcelWriter(resultpath+self.args.data+'_'+str(round(best_eva_list[1]*10000)/100)+"_"+str(self.args.random_seed)+"_"+now_time+'.xlsx')
+
+    #     temp = {}
+    #     temp[" "] = self.class_label
+    #     for j,l in enumerate(self.matrix[0]):
+    #         temp[self.class_label[j]]=self.matrix[0][j]
+    #     data1 = pd.DataFrame(temp)
+    #     data1.to_excel(writer,sheet_name="0", encoding='utf8')
+
+    #     df = pd.DataFrame(self.eva_matrix[0]).transpose()
+    #     df.to_excel(writer,sheet_name="0_evaluate", encoding='utf8')
+        
+    #     writer.save()
+    #     writer.close()
+
+    #     K.clear_session()
+    #     self.matrix = []
+    #     self.eva_matrix = []
+    #     self.trained = True
 
 
     
@@ -268,18 +331,19 @@ def create_timnet_model(args, data_shape, num_classes):
     print("Temporal create success!")
     return model
 
-def my_test(args, x, y, class_labels, dataset_name): 
+
+def my_test(args, model, x, y, class_labels, dataset_name): 
     ### CAVEAT: Must ensure that the data on which the weights are trained 
     ### has the same x and y shapes as the test data.
-    weights_path = args.weights_path
+    # weights_path = args.weights_path
     results_folder = args.result_path
 
-    # Create the model and load weights
-    num_classes = len(class_labels)
-    data_shape = x.shape[1:]
-    model = create_timnet_model(args=args, data_shape=data_shape, 
-                                num_classes=num_classes)
-    model.load_weights(weights_path)
+    # # Create the model and load weights
+    # num_classes = len(class_labels)
+    # data_shape = x.shape[1:]
+    # model = create_timnet_model(args=args, data_shape=data_shape, 
+    #                             num_classes=num_classes)
+    # model.load_weights(weights_path)
 
     # Get the predictions and evaluate
     y_pred = model.predict(x)
@@ -293,10 +357,10 @@ def my_test(args, x, y, class_labels, dataset_name):
     print('Confusion Matrix: \n', conf_matrix_df)
 
     # Save confusion matrix as .csv
-    model_name = Path(weights_path).stem
-    test_name = model_name + "_ON_" + dataset_name
+    # model_name = Path(weights_path).stem
+    # test_name = model_name + "_ON_" + dataset_name
     save_folder = Path(results_folder)
-    conf_matrix_path = save_folder / ("CONF_MATRIX_" + test_name + ".csv")
+    conf_matrix_path = save_folder / ("CONF_MATRIX_" + args.data + ".csv")
     conf_matrix_df.to_csv(conf_matrix_path)
     print(f'Confusion matrix has been saved to {conf_matrix_path}')
 
@@ -308,8 +372,56 @@ def my_test(args, x, y, class_labels, dataset_name):
     print('Classification Report: \n', eval_metrics_df)
 
     # Save classification report as .csv
-    eval_metrics_path = save_folder / ("EVAL_METRICS_" + test_name + ".csv")
+    eval_metrics_path = save_folder / ("EVAL_METRICS_" + args.data + ".csv")
     eval_metrics_df.to_csv(eval_metrics_path)
     print(f'Classification report has been saved to {eval_metrics_path}')
 
     return
+
+
+######## THIS VERSION IS ONLY COMPATIBLE WITH A SINGLE DATASET
+# def my_test(args, x, y, class_labels, dataset_name): 
+#     ### CAVEAT: Must ensure that the data on which the weights are trained 
+#     ### has the same x and y shapes as the test data.
+#     weights_path = args.weights_path
+#     results_folder = args.result_path
+
+#     # Create the model and load weights
+#     num_classes = len(class_labels)
+#     data_shape = x.shape[1:]
+#     model = create_timnet_model(args=args, data_shape=data_shape, 
+#                                 num_classes=num_classes)
+#     model.load_weights(weights_path)
+
+#     # Get the predictions and evaluate
+#     y_pred = model.predict(x)
+#     y_true = np.argmax(y, axis=1)
+#     y_pred_best = np.argmax(y_pred, axis=1)
+    
+#     # Confusion matrix
+#     conf_matrix = confusion_matrix(y_true, y_pred_best)
+#     conf_matrix_df = pd.DataFrame(conf_matrix, columns=class_labels,
+#                                   index=class_labels)
+#     print('Confusion Matrix: \n', conf_matrix_df)
+
+#     # Save confusion matrix as .csv
+#     model_name = Path(weights_path).stem
+#     test_name = model_name + "_ON_" + dataset_name
+#     save_folder = Path(results_folder)
+#     conf_matrix_path = save_folder / ("CONF_MATRIX_" + test_name + ".csv")
+#     conf_matrix_df.to_csv(conf_matrix_path)
+#     print(f'Confusion matrix has been saved to {conf_matrix_path}')
+
+#     # Classification report
+#     eval_metrics = classification_report(y_true, y_pred_best, 
+#                                          target_names=class_labels, 
+#                                          output_dict=True)
+#     eval_metrics_df = pd.DataFrame(eval_metrics).transpose()
+#     print('Classification Report: \n', eval_metrics_df)
+
+#     # Save classification report as .csv
+#     eval_metrics_path = save_folder / ("EVAL_METRICS_" + test_name + ".csv")
+#     eval_metrics_df.to_csv(eval_metrics_path)
+#     print(f'Classification report has been saved to {eval_metrics_path}')
+
+#     return

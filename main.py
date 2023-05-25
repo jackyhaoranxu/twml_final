@@ -16,6 +16,7 @@ import argparse
 ### MY MODIFICATION
 from Model import my_test
 from pathlib import Path
+from format_data import get_train_test_data
 
 parser = argparse.ArgumentParser()
 
@@ -23,6 +24,7 @@ parser.add_argument('--mode', type=str, default="train")
 parser.add_argument('--model_path', type=str, default='./Models/')
 parser.add_argument('--result_path', type=str, default='./Results/')
 parser.add_argument('--test_path', type=str, default='./Test_Models/EMODB_46')
+# FORMAT: TrainData1-TrainData2_TestData1-TestData2
 parser.add_argument('--data', type=str, default='EMODB')
 parser.add_argument('--lr', type=float, default=0.001)
 parser.add_argument('--beta1', type=float, default=0.93)
@@ -42,11 +44,19 @@ parser.add_argument('--gpu', type=str, default='0')
 ### MY MODIFICATION:
 ### Add parser arguments that allow custom dataset input
 parser.add_argument('--data_path', type=str, default=None)
+
+# EXAMPLE: --class_labels label1 label2 label3 ...
 parser.add_argument('--class_labels', type=str, nargs='+', default=None)
+
 ### Add parser arguments that specify weights path (the original code
 ### makes this via set string rules, consequently allowing only the 
 ### weights trained from the six defualt datasets.)
 parser.add_argument('--weights_path', type=str, default=None)
+
+### ADDITIONAL ARGUMENTS FOR TRAIN/TEST ON GROUPED DATASETS
+parser.add_argument('--train_datasets', type=str, nargs='+', default=None)
+parser.add_argument('--test_datasets', type=str, nargs='+', default=None)
+parser.add_argument('--data_type', type=str, default=None)
 
 args = parser.parse_args()
 
@@ -75,42 +85,67 @@ CLASS_LABELS_dict = {"CASIA": CASIA_CLASS_LABELS,
                "SAVEE": SAVEE_CLASS_LABELS}
 
 ### MY MODIFICATION:
+    
+common_labels = ['angry', 'fear', 'happy', 'neutral', 'sad']
+
+
+# use data_type argument to specify which dataset to use for model    
+if args.data_type == 'mfcc':
+    data_dir = 'MFCC_Uniform' # padded MFCC data
+elif args.data_type == 'audio':
+    data_dir = 'Processed_Audio' # padded raw audio data
+
+# parse datasets to use for training/testing
+train_names = args.train_datasets
+test_names = args.test_datasets
+
+# combine datasets for training/testing
+train_data, test_data = get_train_test_data(data_dir, train_names, test_names)
+
+# train model
+model_init = TIMNET_Model(args=args, input_shape=train_data['x'].shape[1:], class_label=common_labels)
+model_trained = model_init.my_train(train_data['x'], train_data['y'])
+
+# test model
+my_test(args=args, model=model_trained, x=test_data['x'], y=test_data['y'], class_labels=common_labels, dataset_name=data_dir)
+    
+
 ### Either load data from path, or load by default style as written originally.
-if args.data_path is None:
-    data = np.load("./MFCC/"+args.data+".npy",allow_pickle=True).item()
-    CLASS_LABELS = CLASS_LABELS_dict[args.data]
-    dataset_name = args.data
-else:
-    if args.class_labels is None:
-        raise ValueError('If you want to train or test on a custom dataset,\
-                         you must also provide its class labels (in the correct\
-                         order.)')
-    else:
-        data = np.load(args.data_path, allow_pickle=True).item()
-        CLASS_LABELS = args.class_labels
-        dataset_name = Path(args.data_path).stem
-        args.data = dataset_name  # will be used for file naming
-x_source = data["x"]
-y_source = data["y"]
+# if args.data_path is None:
+#     data = np.load("./MFCC/"+args.data+".npy",allow_pickle=True).item()
+#     CLASS_LABELS = CLASS_LABELS_dict[args.data]
+#     dataset_name = args.data
+# else:
+#     if args.class_labels is None:
+#         raise ValueError('If you want to train or test on a custom dataset,\
+#                          you must also provide its class labels (in the correct\
+#                          order.)')
+#     else:
+#         data = np.load(args.data_path, allow_pickle=True).item()
+#         CLASS_LABELS = args.class_labels
+#         dataset_name = Path(args.data_path).stem
+#         args.data = dataset_name  # will be used for file naming
+# x_source = data["x"]
+# y_source = data["y"]
 
 
-if args.mode=="train":
-    model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
-    model.train(x_source, y_source)
-elif args.mode=='my_train':
-    model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
-    model.my_train(x_source, y_source)
-elif args.mode=="test":
-    model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
-    x_feats, y_labels = model.test(x_source, y_source, path=args.test_path)# x_feats and y_labels are test datas for t-sne
-### MY MODIFICATION
-### Run my_test defined in Model.py 
-elif args.mode=='my_test':
-    if args.weights_path is None:
-        raise ValueError('You must specify the path to the .hdf5 weights file\
-                         in order to test an isomorphic model on the provided\
-                         dataset.')
-    else:
-        my_test(args=args, x=x_source, y=y_source, class_labels=CLASS_LABELS,
-                dataset_name=dataset_name)
+# if args.mode=="train":
+#     model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
+#     model.train(x_source, y_source)
+# elif args.mode=='my_train':
+#     model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
+#     model.my_train(x_source, y_source)
+# elif args.mode=="test":
+#     model = TIMNET_Model(args=args, input_shape=x_source.shape[1:], class_label=CLASS_LABELS)
+#     x_feats, y_labels = model.test(x_source, y_source, path=args.test_path)# x_feats and y_labels are test datas for t-sne
+# ### MY MODIFICATION
+# ### Run my_test defined in Model.py 
+# elif args.mode=='my_test':
+#     if args.weights_path is None:
+#         raise ValueError('You must specify the path to the .hdf5 weights file\
+#                          in order to test an isomorphic model on the provided\
+#                          dataset.')
+#     else:
+#         my_test(args=args, x=x_source, y=y_source, class_labels=CLASS_LABELS,
+#                 dataset_name=dataset_name)
   
