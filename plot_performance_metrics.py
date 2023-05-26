@@ -173,17 +173,27 @@ acc_dir = 'Accuracy'
 acc_path = os.path.join(cur_dir, figures_dir, acc_dir)
 
 # train 3, test 1
+train3_test1_acc_avg = [np.mean([acc_emodbemovoravde_savee_audio_vals*100,\
+                          acc_emodbemovosavee_ravde_audio_vals*100,\
+                          acc_emodbravdesavee_emovo_audio_vals*100,\
+                          acc_emovoravdesavee_emodb_audio_vals*100]),\
+                        np.mean([acc_emodbemovoravde_savee_mfcc_vals*100,\
+                        acc_emodbemovosavee_ravde_mfcc_vals*100,\
+                        acc_emodbravdesavee_emovo_mfcc_vals*100,\
+                        acc_emovoravdesavee_emodb_mfcc_vals*100])]
 train3_test1_acc_audio = [acc_emodbemovoravde_savee_audio_vals*100,\
                           acc_emodbemovosavee_ravde_audio_vals*100,\
                           acc_emodbravdesavee_emovo_audio_vals*100,\
-                          acc_emovoravdesavee_emodb_audio_vals*100]
+                          acc_emovoravdesavee_emodb_audio_vals*100,\
+                          train3_test1_acc_avg[0]]
 train3_test1_acc_mfcc = [acc_emodbemovoravde_savee_mfcc_vals*100,\
                           acc_emodbemovosavee_ravde_mfcc_vals*100,\
                           acc_emodbravdesavee_emovo_mfcc_vals*100,\
-                          acc_emovoravdesavee_emodb_mfcc_vals*100]
+                          acc_emovoravdesavee_emodb_mfcc_vals*100,\
+                          train3_test1_acc_avg[1]]
     
 train3_test1_title = 'Train on 3 Datasets, Test on 1 Dataset'
-train3_test1_test_datasets = ['SAVEE', 'RAVDE', 'EMOVO', 'EMODB']
+train3_test1_test_datasets = ['SAVEE', 'RAVDE', 'EMOVO', 'EMODB', 'Average']
 
 plot_accuracy(train3_test1_acc_audio, train3_test1_acc_mfcc, train3_test1_test_datasets, train3_test1_title, acc_path, 'Train3Test1')
 
